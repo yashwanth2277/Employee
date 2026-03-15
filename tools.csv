@@ -1,0 +1,11 @@
+tool_id,tool_name,tool_type,purpose
+T001,OpenAI API,LLM API,Natural language reasoning and generation
+T002,Pinecone,Vector Database,RAG and semantic search
+T003,PostgreSQL,Database,Structured relational data storage
+T004,Google Search,Search Engine,External information retrieval
+T005,LangChain,AI Framework,Agent orchestration and tool integration
+T006,TensorFlow,ML Framework,Deep learning model training and inference
+T007,Scikit-learn,ML Library,Classical ML model development
+T008,Apache Spark,Data Processing,Large-scale data pipeline and ETL
+T009,Docker,Containerization,Environment standardization and deployment
+T010,React,Frontend Framework,Interactive web UI development

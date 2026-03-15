@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Employee Management System</title>
+  <meta name="description" content="AI-powered project planning system that assigns teams, breaks tasks, visualizes dependency graphs, and estimates timelines from CSV inputs." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-icon">⚡</div>
+    <span class="logo-text">AI<span class="accent">PlanX</span></span>
+  </div>
+  <nav class="sidebar-nav">
+    <a href="#" class="nav-item active" data-page="dashboard" id="nav-dashboard">
+      <span class="nav-icon">🏠</span><span>Dashboard</span>
+    </a>
+    <a href="#" class="nav-item" data-page="projects" id="nav-projects">
+      <span class="nav-icon">📁</span><span>Projects</span>
+    </a>
+    <a href="#" class="nav-item" data-page="team" id="nav-team">
+      <span class="nav-icon">👥</span><span>Team</span>
+    </a>
+    <a href="#" class="nav-item" data-page="graph" id="nav-graph">
+      <span class="nav-icon">🔗</span><span>Dependency Graph</span>
+    </a>
+    <a href="#" class="nav-item" data-page="timeline" id="nav-timeline">
+      <span class="nav-icon">📅</span><span>Timeline</span>
+    </a>
+    <a href="#" class="nav-item" data-page="history" id="nav-history">
+      <span class="nav-icon">📜</span><span>History</span>
+    </a>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="status-dot"></div>
+    <span>AI Engine Active</span>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main class="main-content">
+
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <div class="topbar-left">
+      <button class="sidebar-toggle" onclick="toggleSidebar()">☰</button>
+      <h1 class="page-title" id="pageTitle">Dashboard</h1>
+    </div>
+    <div class="topbar-right">
+      <div class="upload-zone-mini" id="uploadTrigger" onclick="document.getElementById('uploadModal').classList.add('open')">
+        <span>📂</span> Upload CSVs
+      </div>
+      <div class="badge" id="statusBadge">Awaiting Data</div>
+    </div>
+  </header>
+
+  <!-- PAGES -->
+  <div class="pages-container">
+
+    <!-- ========== DASHBOARD PAGE ========== -->
+    <div class="page active" id="page-dashboard">
+      <div class="hero-banner">
+        <div class="hero-text">
+          <h2>AI Project Planning Engine</h2>
+          <p>Upload your project and employee CSVs. Our AI engine will break tasks, assign teams, draw dependency graphs, and estimate timelines — automatically.</p>
+        </div>
+        <button class="btn-primary" onclick="document.getElementById('uploadModal').classList.add('open')">
+          🚀 Start Planning
+        </button>
+      </div>
+
+      <div class="stats-row" id="statsRow">
+        <div class="stat-card">
+          <div class="stat-icon">📁</div>
+          <div class="stat-val" id="statProjects">0</div>
+          <div class="stat-label">Projects</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">👥</div>
+          <div class="stat-val" id="statEmployees">0</div>
+          <div class="stat-label">Employees</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">✅</div>
+          <div class="stat-val" id="statTasks">0</div>
+          <div class="stat-label">AI Tasks Generated</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">⏱️</div>
+          <div class="stat-val" id="statDays">0</div>
+          <div class="stat-label">Avg. Est. Days</div>
+        </div>
+      </div>
+
+      <div class="section-header"><h3>📊 Priority Queue</h3></div>
+      <div class="project-grid" id="dashboardProjectGrid">
+        <div class="empty-state">Upload CSVs to generate project plans</div>
+      </div>
+
+      <div class="two-col">
+        <div class="panel">
+          <div class="panel-title">🔥 Team Workload</div>
+          <canvas id="workloadChart" height="200"></canvas>
+        </div>
+        <div class="panel">
+          <div class="panel-title">📈 Project Priority Distribution</div>
+          <canvas id="priorityChart" height="200"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== PROJECTS PAGE ========== -->
+    <div class="page" id="page-projects">
+      <div class="section-header"><h3>📁 All Projects — AI Task Plans</h3></div>
+      <div id="projectsContainer">
+        <div class="empty-state">Upload project CSV to see AI-generated task plans</div>
+      </div>
+    </div>
+
+    <!-- ========== TEAM PAGE ========== -->
+    <div class="page" id="page-team">
+      <div class="section-header"><h3>👥 Team Overview & Assignments</h3></div>
+      <div class="team-grid" id="teamGrid">
+        <div class="empty-state">Upload employee CSV to see team assignments</div>
+      </div>
+    </div>
+
+    <!-- ========== DEPENDENCY GRAPH PAGE ========== -->
+    <div class="page" id="page-graph">
+      <div class="section-header">
+        <h3>🔗 Task Dependency Graph</h3>
+        <div class="filter-row">
+          <select id="graphProjectFilter" class="select-input" onchange="renderDependencyGraph()">
+            <option value="all">All Projects</option>
+          </select>
+          <button class="btn-sm" onclick="resetZoom()">🔄 Reset Zoom</button>
+        </div>
+      </div>
+      <div class="graph-legend">
+        <div class="legend-item"><span class="dot dot-research"></span>Research</div>
+        <div class="legend-item"><span class="dot dot-design"></span>Design</div>
+        <div class="legend-item"><span class="dot dot-dev"></span>Development</div>
+        <div class="legend-item"><span class="dot dot-test"></span>Testing</div>
+        <div class="legend-item"><span class="dot dot-deploy"></span>Deployment</div>
+      </div>
+      <div id="dependencyGraph" class="graph-container">
+        <div class="empty-state">Upload CSVs to generate dependency graph</div>
+      </div>
+    </div>
+
+    <!-- ========== TIMELINE PAGE ========== -->
+    <div class="page" id="page-timeline">
+      <div class="section-header">
+        <h3>📅 Project Timeline (Gantt)</h3>
+        <select id="timelineProjectFilter" class="select-input" onchange="renderTimeline()">
+          <option value="all">All Projects</option>
+        </select>
+      </div>
+      <div id="timelineContainer">
+        <div class="empty-state">Upload CSVs to see Gantt timeline</div>
+      </div>
+    </div>
+
+    <!-- ========== HISTORY PAGE ========== -->
+    <div class="page" id="page-history">
+      <div class="section-header"><h3>📜 Project History & Insights</h3></div>
+      <div id="historyContainer">
+        <div class="empty-state">Upload project_history.csv to see insights</div>
+      </div>
+    </div>
+
+  </div><!-- /pages-container -->
+</main>
+
+<!-- ========== UPLOAD MODAL ========== -->
+<div class="modal-overlay" id="uploadModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h2>📂 Upload CSV Files</h2>
+      <button class="modal-close" onclick="document.getElementById('uploadModal').classList.remove('open')">✕</button>
+    </div>
+    <div class="modal-body">
+
+      <!-- SINGLE DROP ZONE -->
+      <div class="drop-zone" id="dropZone"
+           ondragover="event.preventDefault(); this.classList.add('drag-over')"
+           ondragleave="this.classList.remove('drag-over')"
+           ondrop="handleDrop(event)">
+        <div class="drop-icon">☁️</div>
+        <div class="drop-title">Drop your CSV files here</div>
+        <div class="drop-sub">or click to browse — any file names, any order</div>
+        <input type="file" accept=".csv" id="csvFileInput" multiple onchange="handleFileInput(this)" />
+        <label for="csvFileInput" class="upload-btn" style="margin-top:16px">Browse Files</label>
+        <div class="drop-hint-cols">
+          Auto-detects: <span>Projects</span> · <span>Employees</span> · <span>History</span> · <span>Tools</span>
+        </div>
+      </div>
+
+      <!-- DETECTED FILES LIST -->
+      <div id="detectedFilesList" class="detected-list" style="display:none"></div>
+
+      <!-- DEMO ROW -->
+      <div class="demo-row" style="margin-top:16px">
+        <button class="btn-demo" onclick="loadDemoData()">⚡ Load Sample Data</button>
+        <span class="demo-hint">Load built-in demo CSVs instantly</span>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-primary btn-generate" id="btnGenerate" onclick="generatePlan()" disabled>
+        🤖 Generate AI Plan
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script src="app.js"></script>
+</body>
+</html>

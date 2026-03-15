@@ -1,0 +1,11 @@
+employee_id,employee_name,role,skills,experience,current_workload_percent
+EMP001,Aarav Sharma,AI Engineer,Python;LLMs;TensorFlow;NLP,4,40
+EMP002,Riya Patel,Data Scientist,Python;Data Analysis;ML;Pandas,3,35
+EMP003,Vikram Singh,Backend Developer,Node.js;APIs;PostgreSQL;Docker,5,50
+EMP004,Sneha Reddy,Frontend Developer,React;UI/UX;JavaScript;CSS,2,30
+EMP005,Karthik Rao,DevOps Engineer,Docker;Kubernetes;CI/CD;AWS,4,45
+EMP006,Meera Nair,AI Researcher,LLMs;NLP;RAG;PyTorch,6,55
+EMP007,Arjun Mehta,Full Stack Developer,React;Node.js;Python;MongoDB,5,60
+EMP008,Divya Krishnan,Data Engineer,Spark;SQL;ETL;Python,4,25
+EMP009,Rahul Gupta,ML Engineer,Scikit-learn;Python;ML;XGBoost,3,40
+EMP010,Priya Joshi,Product Manager,Agile;Scrum;JIRA;Planning,7,50

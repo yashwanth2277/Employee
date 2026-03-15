@@ -1,0 +1,7 @@
+history_id,project_id,project_name,team_size,tools_used,completion_days,success_score
+H001,PRJ010,Fraud Detection System,4,Python;Scikit-learn;Spark,28,0.92
+H002,PRJ011,AI Resume Screener,3,Python;NLP;LLM,22,0.89
+H003,PRJ012,Retail Recommender,5,TensorFlow;Python;MongoDB,35,0.94
+H004,PRJ013,Sentiment Analyzer,2,Python;NLTK;BERT,18,0.87
+H005,PRJ014,Supply Chain Optimizer,4,Python;OR-Tools;PostgreSQL,30,0.91
+H006,PRJ015,Customer Churn Predictor,3,XGBoost;Python;Pandas,24,0.88

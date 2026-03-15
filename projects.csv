@@ -1,0 +1,7 @@
+project_id,project_name,description,required_skills,deadline_days,priority
+PRJ001,AI Sales Assistant,AI assistant for sales teams using LLM and NLP to automate customer interactions,LLM;NLP;API;Python,30,High
+PRJ002,Healthcare Predictor,Predict early disease onset using patient data and machine learning models,ML;Data Analysis;Python;SQL,45,High
+PRJ003,Customer AI Chatbot,AI chatbot using LLM and RAG for real-time customer support,LLM;RAG;Python;Node.js,25,Medium
+PRJ004,Smart Inventory System,Automated inventory management system using Python and ML forecasting,Python;ML;PostgreSQL;APIs,40,Medium
+PRJ005,HR Analytics Dashboard,Interactive dashboard for HR analytics with employee performance visualization,React;Python;Data Analysis;UI/UX,20,Low
+PRJ006,Fraud Detection Engine,Real-time fraud detection using ML and streaming data pipelines,ML;Python;Spark;ETL,35,High
